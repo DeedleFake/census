@@ -2,6 +2,7 @@ package events
 
 import (
 	"encoding/json"
+	"github.com/DeedleFake/census"
 )
 
 // Event represents a message read from an event stream.
@@ -122,11 +123,11 @@ func (ev HeartbeatEvent) Type() string {
 }
 
 type AchievementEarnedEvent struct {
-	CharacterID   int   `json:"character_id,string"`
-	Timestamp     int64 `json:"timestamp,string"`
-	WorldID       int   `json:"world_id,string"`
-	AchievementID int   `json:"achievement_id,string"`
-	ZoneID        int   `json:"zone_id,string"`
+	CharacterID   int             `json:"character_id,string"`
+	Timestamp     int64           `json:"timestamp,string"`
+	WorldID       census.PS2World `json:"world_id,string"`
+	AchievementID int             `json:"achievement_id,string"`
+	ZoneID        int             `json:"zone_id,string"`
 }
 
 func (ev AchievementEarnedEvent) Type() string {
@@ -134,11 +135,11 @@ func (ev AchievementEarnedEvent) Type() string {
 }
 
 type BattleRankUpEvent struct {
-	BattleRank  int   `json:"battle_rank,string"`
-	CharacterID int   `json:"character_id,string"`
-	Timestamp   int64 `json:"timestamp,string"`
-	WorldID     int   `json:"world_id,string"`
-	ZoneID      int   `json:"zone_id,string"`
+	BattleRank  int             `json:"battle_rank,string"`
+	CharacterID int             `json:"character_id,string"`
+	Timestamp   int64           `json:"timestamp,string"`
+	WorldID     census.PS2World `json:"world_id,string"`
+	ZoneID      int             `json:"zone_id,string"`
 }
 
 func (ev BattleRankUpEvent) Type() string {
@@ -146,19 +147,19 @@ func (ev BattleRankUpEvent) Type() string {
 }
 
 type DeathEvent struct {
-	AttackerCharacterID int   `json:"attacker_character_id,string"`
-	AttackerFireModeID  int   `json:"attacker_fire_mode_id,string"`
-	AttackerLoadoutID   int   `json:"attacker_loadout_id,string"`
-	AttackerVehicleID   int   `json:"attacker_vehicle_id,string"`
-	AttackerWeaponID    int   `json:"attacker_weapon_id,string"`
-	CharacterID         int   `json:"character_id,string"`
-	CharacterLoadoutID  int   `json:"character_loadout_id,string"`
-	IsCritical          int   `json:"is_critical,string"`
-	IsHeadshot          int   `json:"is_headshot,string"`
-	Timestamp           int64 `json:"timestamp,string"`
-	VehicleID           int   `json:"vehicle_id,string"`
-	WorldID             int   `json:"world_id,string"`
-	ZoneID              int   `json:"zone_id,string"`
+	AttackerCharacterID int             `json:"attacker_character_id,string"`
+	AttackerFireModeID  int             `json:"attacker_fire_mode_id,string"`
+	AttackerLoadoutID   int             `json:"attacker_loadout_id,string"`
+	AttackerVehicleID   int             `json:"attacker_vehicle_id,string"`
+	AttackerWeaponID    int             `json:"attacker_weapon_id,string"`
+	CharacterID         int             `json:"character_id,string"`
+	CharacterLoadoutID  int             `json:"character_loadout_id,string"`
+	IsCritical          int             `json:"is_critical,string"`
+	IsHeadshot          int             `json:"is_headshot,string"`
+	Timestamp           int64           `json:"timestamp,string"`
+	VehicleID           int             `json:"vehicle_id,string"`
+	WorldID             census.PS2World `json:"world_id,string"`
+	ZoneID              int             `json:"zone_id,string"`
 }
 
 func (ev DeathEvent) Type() string {
@@ -166,14 +167,14 @@ func (ev DeathEvent) Type() string {
 }
 
 type FacilityControlEvent struct {
-	DurationHeld int   `json:"duration_held,string"`
-	FacilityID   int   `json:"facility_id,string"`
-	NewFactionID int   `json:"new_faction_id,string"`
-	OldFactionID int   `json:"old_faction_id,string"`
-	OutfitID     int   `json:"outfit_id,string"`
-	Timestamp    int64 `json:"timestamp,string"`
-	WorldID      int   `json:"world_id,string"`
-	ZoneID       int   `json:"zone_id,string"`
+	DurationHeld int             `json:"duration_held,string"`
+	FacilityID   int             `json:"facility_id,string"`
+	NewFactionID int             `json:"new_faction_id,string"`
+	OldFactionID int             `json:"old_faction_id,string"`
+	OutfitID     int             `json:"outfit_id,string"`
+	Timestamp    int64           `json:"timestamp,string"`
+	WorldID      census.PS2World `json:"world_id,string"`
+	ZoneID       int             `json:"zone_id,string"`
 }
 
 func (ev FacilityControlEvent) Type() string {
