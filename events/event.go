@@ -26,10 +26,12 @@ func eventFromRaw(raw []byte) (Event, error) {
 		ev = new(ServiceStateChangedEvent)
 	case "heartbeat":
 		ev = new(HeartbeatEvent)
+	case "serviceMessage":
+		return serviceMessage(raw)
 	case "":
 		return nil, nil
 	default:
-		return nil, UnknownEventType(common.Type)
+		return nil, UnknownEventTypeError(common.Type)
 	}
 
 	err = json.Unmarshal(raw, &ev)
@@ -40,9 +42,42 @@ func eventFromRaw(raw []byte) (Event, error) {
 	return ev.(Event), nil
 }
 
-type UnknownEventType string
+func serviceMessage(raw []byte) (Event, error) {
+	var outer struct {
+		Payload json.RawMessage `json:"payload"`
+	}
+	err := json.Unmarshal(raw, &outer)
+	if err != nil {
+		return nil, err
+	}
 
-func (err UnknownEventType) Error() string {
+	var common struct {
+		EventName string `json:"event_name"`
+	}
+	err = json.Unmarshal(outer.Payload, &common)
+	if err != nil {
+		return nil, err
+	}
+
+	var ev interface{}
+	switch common.EventName {
+	case "FacilityControl":
+		ev = new(FacilityControlEvent)
+	default:
+		return nil, UnknownEventTypeError(common.EventName)
+	}
+
+	err = json.Unmarshal(outer.Payload, ev)
+	if err != nil {
+		return nil, err
+	}
+
+	return ev.(Event), nil
+}
+
+type UnknownEventTypeError string
+
+func (err UnknownEventTypeError) Error() string {
 	return "Unknown event type: " + string(err)
 }
 
@@ -84,11 +119,25 @@ type DeathEvent struct {
 	AttackerWeaponID    string `json:"attacker_weapon_id"`
 	CharacterID         string `json:"character_id"`
 	CharacterLoadoutID  string `json:"character_loadout_id"`
-	EventName           string `json:"event_name"`
 	IsCritical          bool   `json:"is_critical,string"`
 	IsHeadshot          bool   `json:"is_headshot,string"`
 	Timestamp           string `json:"timestamp"`
 	VehicleID           string `json:"vehicle_id"`
 	WorldID             string `json:"world_id"`
 	ZoneID              string `json:"zone_id"`
+}
+
+type FacilityControlEvent struct {
+	DurationHeld int    `json:"duration_held,string"`
+	FacilityID   int    `json:"facility_id,string"`
+	NewFactionID int    `json:"new_faction_id,string"`
+	OldFactionID int    `json:"old_faction_id,string"`
+	OutfitID     int    `json:"outfit_id,string"`
+	Timestamp    uint64 `json:"timestamp,string"`
+	WorldID      int    `json:"world_id,string"`
+	ZoneID       int    `json:"zone_id,string"`
+}
+
+func (ev FacilityControlEvent) Type() string {
+	return "FacilityControl"
 }
