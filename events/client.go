@@ -11,6 +11,7 @@ const (
 	DefaultEnv  = "ps2"
 )
 
+// Client is a connection to the Census API event streaming system.
 type Client struct {
 	c *websocket.Conn
 
@@ -18,6 +19,10 @@ type Client struct {
 	d *json.Decoder
 }
 
+// NewClient creates a new Client. It connects to the URL at base and
+// the environment env using the service ID svcid. If base or env are
+// the empty string, then DefaultBase and DefaultEnv are used,
+// respectively.
 func NewClient(base, env, svcid string) (*Client, error) {
 	if base == "" {
 		base = DefaultBase
@@ -39,6 +44,8 @@ func NewClient(base, env, svcid string) (*Client, error) {
 	}, nil
 }
 
+// Close closes the connection to the server. Use of the Client after
+// calling Close may or may not panic.
 func (c *Client) Close() error {
 	err := c.c.Close()
 	if err != nil {
@@ -52,6 +59,7 @@ func (c *Client) Close() error {
 	return nil
 }
 
+// Conn returns the underlying connection to the server.
 func (c *Client) Conn() net.Conn {
 	return c.c
 }
@@ -70,6 +78,7 @@ func (c *Client) echo(payload interface{}) error {
 	})
 }
 
+// Sub represents a subscription request.
 type Sub struct {
 	Events []string
 	Chars  []string
@@ -77,6 +86,16 @@ type Sub struct {
 }
 
 var (
+	// SubAll is a special value that can be used for any or all of the
+	// fields of a Sub as a means of matching all possible values for
+	// that field. For example,
+	//
+	//     Sub{
+	//         Events: []string{"BattleRankUp"},
+	//         Chars: SubAll,
+	//     }
+	//
+	// will subscribe to level up events for every character.
 	SubAll = []string{"all"}
 )
 
@@ -96,14 +115,22 @@ func (c *Client) sub(action string, events, chars, worlds []string) error {
 	})
 }
 
+// Subscribe subscribes to the events specified by sub. For more
+// information, see http://census.daybreakgames.com/#websocket-details
 func (c *Client) Subscribe(sub Sub) error {
 	return c.sub("subscribe", sub.Events, sub.Chars, sub.Worlds)
 }
 
+// Unsubscribe unsubscribes from the events specified by sub. For more
+// information, see http://census.daybreakgames.com/#websocket-details
 func (c *Client) Unsubscribe(sub Sub) error {
 	return c.sub("clearSubscribe", sub.Events, sub.Chars, sub.Worlds)
 }
 
+// Next blocks until the next event can be read from the event stream
+// or an error occurs. It then returns that event or the error. If an
+// unsupported event is read, a nil Event and an UnknownEventTypeError
+// are returned.
 func (c *Client) Next() (ev Event, err error) {
 	for (ev == nil) && (err == nil) {
 		var raw json.RawMessage

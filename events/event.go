@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 )
 
+// Event represents a message read from an event stream.
 type Event interface {
 	Type() string
 }
@@ -61,6 +62,8 @@ func serviceMessage(raw []byte) (Event, error) {
 
 	var ev interface{}
 	switch common.EventName {
+	case "Death":
+		ev = new(DeathEvent)
 	case "FacilityControl":
 		ev = new(FacilityControlEvent)
 	default:
@@ -75,6 +78,9 @@ func serviceMessage(raw []byte) (Event, error) {
 	return ev.(Event), nil
 }
 
+// UnknownEventTypeError is returned by event stream readers that
+// encountered an event that they didn't know how to handle. The value
+// of the error is set to the string name of the event type.
 type UnknownEventTypeError string
 
 func (err UnknownEventTypeError) Error() string {
@@ -112,30 +118,34 @@ func (ev HeartbeatEvent) Type() string {
 }
 
 type DeathEvent struct {
-	AttackerCharacterID string `json:"attacker_character_id"`
-	AttackerFireModeID  string `json:"attacker_fire_mode_id"`
-	AttackerLoadoutID   string `json:"attacker_loadout_id"`
-	AttackerVehicleID   string `json:"attacker_vehicle_id"`
-	AttackerWeaponID    string `json:"attacker_weapon_id"`
-	CharacterID         string `json:"character_id"`
-	CharacterLoadoutID  string `json:"character_loadout_id"`
-	IsCritical          bool   `json:"is_critical,string"`
-	IsHeadshot          bool   `json:"is_headshot,string"`
-	Timestamp           string `json:"timestamp"`
-	VehicleID           string `json:"vehicle_id"`
-	WorldID             string `json:"world_id"`
-	ZoneID              string `json:"zone_id"`
+	AttackerCharacterID int   `json:"attacker_character_id,string"`
+	AttackerFireModeID  int   `json:"attacker_fire_mode_id,string"`
+	AttackerLoadoutID   int   `json:"attacker_loadout_id,string"`
+	AttackerVehicleID   int   `json:"attacker_vehicle_id,string"`
+	AttackerWeaponID    int   `json:"attacker_weapon_id,string"`
+	CharacterID         int   `json:"character_id,string"`
+	CharacterLoadoutID  int   `json:"character_loadout_id,string"`
+	IsCritical          int   `json:"is_critical,string"`
+	IsHeadshot          int   `json:"is_headshot,string"`
+	Timestamp           int64 `json:"timestamp,string"`
+	VehicleID           int   `json:"vehicle_id,string"`
+	WorldID             int   `json:"world_id,string"`
+	ZoneID              int   `json:"zone_id,string"`
+}
+
+func (ev DeathEvent) Type() string {
+	return "Death"
 }
 
 type FacilityControlEvent struct {
-	DurationHeld int    `json:"duration_held,string"`
-	FacilityID   int    `json:"facility_id,string"`
-	NewFactionID int    `json:"new_faction_id,string"`
-	OldFactionID int    `json:"old_faction_id,string"`
-	OutfitID     int    `json:"outfit_id,string"`
-	Timestamp    uint64 `json:"timestamp,string"`
-	WorldID      int    `json:"world_id,string"`
-	ZoneID       int    `json:"zone_id,string"`
+	DurationHeld int   `json:"duration_held,string"`
+	FacilityID   int   `json:"facility_id,string"`
+	NewFactionID int   `json:"new_faction_id,string"`
+	OldFactionID int   `json:"old_faction_id,string"`
+	OutfitID     int   `json:"outfit_id,string"`
+	Timestamp    int64 `json:"timestamp,string"`
+	WorldID      int   `json:"world_id,string"`
+	ZoneID       int   `json:"zone_id,string"`
 }
 
 func (ev FacilityControlEvent) Type() string {
