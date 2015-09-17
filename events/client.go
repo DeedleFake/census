@@ -7,8 +7,12 @@ import (
 )
 
 const (
+	// DefaultBase is the default base used to build the URL that a
+	// Client is connecting to.
 	DefaultBase = "wss://push.planetside2.com/streaming"
-	DefaultEnv  = "ps2"
+
+	// DefaultEnv is the default environment to connect to.
+	DefaultEnv = "ps2"
 )
 
 // Client is a connection to the Census API event streaming system.
