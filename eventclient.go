@@ -26,7 +26,7 @@ func NewEventClient(base, env, svcid string) (*EventClient, error) {
 		env = DefaultEventEnv
 	}
 
-	c, err := websocket.Dial(base+"?environment="+env+"&service-id=s:"+svcid, "", "")
+	c, err := websocket.Dial(base+"?environment="+env+"&service-id=s:"+svcid, "", "http://localhost")
 	if err != nil {
 		return nil, err
 	}
@@ -39,8 +39,35 @@ func NewEventClient(base, env, svcid string) (*EventClient, error) {
 	}, nil
 }
 
+func (c *EventClient) Close() error {
+	err := c.c.Close()
+	if err != nil {
+		return err
+	}
+
+	c.c = nil
+	c.e = nil
+	c.d = nil
+
+	return nil
+}
+
 func (c *EventClient) Conn() net.Conn {
 	return c.c
+}
+
+// This is somewhat problematic as it causes arbitrary JSON to get
+// sent as part of the event stream.
+func (c *EventClient) echo(payload interface{}) error {
+	return c.e.Encode(&struct {
+		Service string      `json:"service"`
+		Action  string      `json:"action"`
+		Payload interface{} `json:"payload"`
+	}{
+		"event",
+		"echo",
+		payload,
+	})
 }
 
 func (c *EventClient) sub(action string, events []Sub) error {
