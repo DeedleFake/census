@@ -62,6 +62,10 @@ func serviceMessage(raw []byte) (Event, error) {
 
 	var ev interface{}
 	switch common.EventName {
+	case "AchievementEarned":
+		ev = new(AchievementEarnedEvent)
+	case "BattleRankUp":
+		ev = new(BattleRankUpEvent)
 	case "Death":
 		ev = new(DeathEvent)
 	case "FacilityControl":
@@ -115,6 +119,30 @@ type HeartbeatEvent struct {
 
 func (ev HeartbeatEvent) Type() string {
 	return "heartbeat"
+}
+
+type AchievementEarnedEvent struct {
+	CharacterID   int   `json:"character_id,string"`
+	Timestamp     int64 `json:"timestamp,string"`
+	WorldID       int   `json:"world_id,string"`
+	AchievementID int   `json:"achievement_id,string"`
+	ZoneID        int   `json:"zone_id,string"`
+}
+
+func (ev AchievementEarnedEvent) Type() string {
+	return "AchievementEarned"
+}
+
+type BattleRankUpEvent struct {
+	BattleRank  int   `json:"battle_rank,string"`
+	CharacterID int   `json:"character_id,string"`
+	Timestamp   int64 `json:"timestamp,string"`
+	WorldID     int   `json:"world_id,string"`
+	ZoneID      int   `json:"zone_id,string"`
+}
+
+func (ev BattleRankUpEvent) Type() string {
+	return "BattleRankUp"
 }
 
 type DeathEvent struct {
