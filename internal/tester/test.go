@@ -27,6 +27,25 @@ func main() {
 			panic(err)
 		}
 
-		fmt.Printf("%#v\n", ev)
+		switch ev := ev.(type) {
+		case *events.FacilityControlEvent:
+			switch ev.NewFactionID {
+			case ev.OldFactionID:
+				fmt.Printf("%v: The %v maintainted ownership of %v.\n",
+					ev.WorldID,
+					ev.NewFactionID,
+					ev.FacilityID,
+				)
+			default:
+				fmt.Printf("%v: The %v captured %v from the %v.\n",
+					ev.WorldID,
+					ev.NewFactionID,
+					ev.FacilityID,
+					ev.OldFactionID,
+				)
+			}
+		default:
+			fmt.Printf("%#v\n", ev)
+		}
 	}
 }
