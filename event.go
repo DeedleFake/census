@@ -1,14 +1,66 @@
 package census
 
+import (
+	"encoding/json"
+)
+
 type Event interface {
+	Type() string
 }
 
-type rawEvent struct {
-	Service string `json:"service"`
-	Type    string `json:"type"`
+func eventFromRaw(raw []byte) (Event, error) {
+	var common struct {
+		Service string `json:"service"`
+		Type    string `json:"type"`
+	}
+	err := json.Unmarshal(raw, &common)
+	if err != nil {
+		return nil, err
+	}
+
+	var ev interface{}
+	switch common.Type {
+	case "connectionStateChanged":
+		ev = new(ConnectionStateChangedEvent)
+	case "serviceStateChanged":
+		ev = new(ServiceStateChangedEvent)
+	case "heartbeat":
+		ev = new(HeartbeatEvent)
+	case "":
+		return nil, nil
+	default:
+		return nil, UnknownEventType(common.Type)
+	}
+
+	err = json.Unmarshal(raw, &ev)
+	if err != nil {
+		return nil, err
+	}
+
+	return ev.(Event), nil
+}
+
+type UnknownEventType string
+
+func (err UnknownEventType) Error() string {
+	return "Unknown event type: " + string(err)
 }
 
 type ConnectionStateChangedEvent struct {
+	Connected bool `json:"connected,string"`
+}
+
+func (ev ConnectionStateChangedEvent) Type() string {
+	return "connectionStateChanged"
+}
+
+type ServiceStateChangedEvent struct {
+	Detail string `json:"detail"`
+	Online bool   `json:"online,string"`
+}
+
+func (ev ServiceStateChangedEvent) Type() string {
+	return "serviceStateChanged"
 }
 
 type HeartbeatEvent struct {
@@ -18,6 +70,10 @@ type HeartbeatEvent struct {
 	Emerald bool `json:"EventServerEndpoint_Emerald_17,string"`
 	Jaeger  bool `json:"EventServerEndpoint_Jaeger_19,string"`
 	Miller  bool `json:"EventServerEndpoint_Miller_10,string"`
+}
+
+func (ev HeartbeatEvent) Type() string {
+	return "heartbeat"
 }
 
 type DeathEvent struct {

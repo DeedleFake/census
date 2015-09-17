@@ -106,6 +106,16 @@ func (c *EventClient) Unsubscribe(events ...Sub) error {
 	return c.sub("clearSubscribe", events)
 }
 
-func (c *EventClient) Next() (Event, error) {
-	panic("Not implemented.")
+func (c *EventClient) Next() (ev Event, err error) {
+	for (ev == nil) && (err == nil) {
+		var raw json.RawMessage
+		err = c.d.Decode(&raw)
+		if err != nil {
+			return
+		}
+
+		ev, err = eventFromRaw(raw)
+	}
+
+	return
 }
