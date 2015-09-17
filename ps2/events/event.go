@@ -27,7 +27,7 @@ func eventFromRaw(raw []byte) (Event, error) {
 	case "serviceStateChanged":
 		ev = new(ServiceStateChangedEvent)
 	case "heartbeat":
-		ev = new(HeartbeatEvent)
+		return heartbeat(raw)
 	case "serviceMessage":
 		return serviceMessage(raw)
 	case "":
@@ -42,6 +42,18 @@ func eventFromRaw(raw []byte) (Event, error) {
 	}
 
 	return ev.(Event), nil
+}
+
+func heartbeat(raw []byte) (Event, error) {
+	var outer struct {
+		Online HeartbeatEvent `json:"online"`
+	}
+	err := json.Unmarshal(raw, &outer)
+	if err != nil {
+		return nil, err
+	}
+
+	return outer.Online, nil
 }
 
 func serviceMessage(raw []byte) (Event, error) {
