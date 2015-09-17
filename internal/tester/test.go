@@ -13,7 +13,7 @@ func main() {
 	defer c.Close()
 
 	err = c.Subscribe(events.Sub{
-		Events: []string{"BattleRankUp"},
+		Events: []string{"FacilityControl"},
 		Chars:  events.SubAll,
 		Worlds: events.SubAll,
 	})

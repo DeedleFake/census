@@ -167,14 +167,14 @@ func (ev DeathEvent) Type() string {
 }
 
 type FacilityControlEvent struct {
-	DurationHeld int             `json:"duration_held,string"`
-	FacilityID   int             `json:"facility_id,string"`
-	NewFactionID int             `json:"new_faction_id,string"`
-	OldFactionID int             `json:"old_faction_id,string"`
-	OutfitID     int             `json:"outfit_id,string"`
-	Timestamp    int64           `json:"timestamp,string"`
-	WorldID      census.PS2World `json:"world_id,string"`
-	ZoneID       int             `json:"zone_id,string"`
+	DurationHeld int               `json:"duration_held,string"`
+	FacilityID   int               `json:"facility_id,string"`
+	NewFactionID census.PS2Faction `json:"new_faction_id,string"`
+	OldFactionID census.PS2Faction `json:"old_faction_id,string"`
+	OutfitID     int               `json:"outfit_id,string"`
+	Timestamp    int64             `json:"timestamp,string"`
+	WorldID      census.PS2World   `json:"world_id,string"`
+	ZoneID       int               `json:"zone_id,string"`
 }
 
 func (ev FacilityControlEvent) Type() string {
