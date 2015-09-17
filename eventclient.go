@@ -105,3 +105,7 @@ func (c *EventClient) Subscribe(events ...Sub) error {
 func (c *EventClient) Unsubscribe(events ...Sub) error {
 	return c.sub("clearSubscribe", events)
 }
+
+func (c *EventClient) Next() (Event, error) {
+	panic("Not implemented.")
+}
