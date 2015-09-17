@@ -43,14 +43,14 @@ func (c *EventClient) Conn() net.Conn {
 	return c.c
 }
 
-func (c *EventClient) Subscribe(events ...Sub) error {
+func (c *EventClient) sub(action string, events []Sub) error {
 	if len(events) == 0 {
 		return nil
 	}
 
 	sub := map[string]interface{}{
 		"service": "event",
-		"action":  "subscribe",
+		"action":  action,
 	}
 
 	ev := make([]string, len(events))
@@ -69,4 +69,12 @@ func (c *EventClient) Subscribe(events ...Sub) error {
 	sub["eventNames"] = ev
 
 	return c.e.Encode(sub)
+}
+
+func (c *EventClient) Subscribe(events ...Sub) error {
+	return c.sub("subscribe", events)
+}
+
+func (c *EventClient) Unsubscribe(events ...Sub) error {
+	return c.sub("clearSubscribe", events)
 }
