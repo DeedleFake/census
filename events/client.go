@@ -70,40 +70,38 @@ func (c *Client) echo(payload interface{}) error {
 	})
 }
 
-func (c *Client) sub(action string, events []Sub) error {
-	if len(events) == 0 {
-		return nil
-	}
-
-	sub := map[string]interface{}{
-		"service": "event",
-		"action":  action,
-	}
-
-	ev := make([]string, len(events))
-	for _, e := range events {
-		ev = append(ev, e.name())
-
-		for pname, pslice := range e.params() {
-			var s []string
-			if i, ok := sub[pname]; ok {
-				s = i.([]string)
-			}
-
-			sub[pname] = append(s, pslice...)
-		}
-	}
-	sub["eventNames"] = ev
-
-	return c.e.Encode(sub)
+type Sub struct {
+	Events []string
+	Chars  []string
+	Worlds []string
 }
 
-func (c *Client) Subscribe(events ...Sub) error {
-	return c.sub("subscribe", events)
+var (
+	SubAll = []string{"all"}
+)
+
+func (c *Client) sub(action string, events, chars, worlds []string) error {
+	return c.e.Encode(&struct {
+		Service string   `json:"service"`
+		Action  string   `json:"action"`
+		Events  []string `json:"eventNames,omitempty"`
+		Chars   []string `json:"characters,omitempty"`
+		Worlds  []string `json:"worlds,omitempty"`
+	}{
+		"event",
+		action,
+		events,
+		chars,
+		worlds,
+	})
 }
 
-func (c *Client) Unsubscribe(events ...Sub) error {
-	return c.sub("clearSubscribe", events)
+func (c *Client) Subscribe(sub Sub) error {
+	return c.sub("subscribe", sub.Events, sub.Chars, sub.Worlds)
+}
+
+func (c *Client) Unsubscribe(sub Sub) error {
+	return c.sub("clearSubscribe", sub.Events, sub.Chars, sub.Worlds)
 }
 
 func (c *Client) Next() (ev Event, err error) {

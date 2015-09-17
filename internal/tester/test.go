@@ -12,9 +12,9 @@ func main() {
 	}
 	defer c.Close()
 
-	err = c.Subscribe(&events.WorldSub{
-		Event:  "FacilityControl",
-		Worlds: []string{"all"},
+	err = c.Subscribe(events.Sub{
+		Events: []string{"FacilityControl"},
+		Worlds: events.SubAll,
 	})
 	if err != nil {
 		panic(err)
