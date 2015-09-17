@@ -1,23 +1,22 @@
-package census
+package ps2
 
 import (
 	"strconv"
 )
 
-// PS2World is a convience type for dealing with PlanetSide 2 world
-// IDs.
-type PS2World int
+// World is a convience type for dealing with PlanetSide 2 world IDs.
+type World int
 
 const (
-	Connery PS2World = 1
-	Miller  PS2World = 10
-	Cobalt  PS2World = 13
-	Emerald PS2World = 17
-	Jaeger  PS2World = 19
-	Briggs  PS2World = 25
+	Connery World = 1
+	Miller  World = 10
+	Cobalt  World = 13
+	Emerald World = 17
+	Jaeger  World = 19
+	Briggs  World = 25
 )
 
-func (w PS2World) String() string {
+func (w World) String() string {
 	switch w {
 	case Connery:
 		return "Connery"
@@ -36,16 +35,18 @@ func (w PS2World) String() string {
 	panic("Unknown world ID: " + strconv.FormatInt(int64(w), 10))
 }
 
-type PS2Faction int
+// Faction is a convience type for dealing with PlanetSide 2 faction
+// IDs.
+type Faction int
 
 const (
-	NaniteSystems   PS2Faction = 0
-	VanuSovereignty PS2Faction = 1
-	NewConglomerate PS2Faction = 2
-	TerranRepublic  PS2Faction = 3
+	NaniteSystems   Faction = 0
+	VanuSovereignty Faction = 1
+	NewConglomerate Faction = 2
+	TerranRepublic  Faction = 3
 )
 
-func (f PS2Faction) String() string {
+func (f Faction) String() string {
 	switch f {
 	case NaniteSystems:
 		return "Nanite Systems"
