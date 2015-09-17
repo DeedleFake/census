@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	DefaultEventBase = "wss://push.planetside2.com/streaming"
-	DefaultEventEnv  = "ps2"
+	DefaultBase = "wss://push.planetside2.com/streaming"
+	DefaultEnv  = "ps2"
 )
 
 type EventClient struct {
@@ -18,12 +18,12 @@ type EventClient struct {
 	d *json.Decoder
 }
 
-func NewEventClient(base, env, svcid string) (*EventClient, error) {
+func New(base, env, svcid string) (*EventClient, error) {
 	if base == "" {
-		base = DefaultEventBase
+		base = DefaultBase
 	}
 	if env == "" {
-		env = DefaultEventEnv
+		env = DefaultEnv
 	}
 
 	c, err := websocket.Dial(base+"?environment="+env+"&service-id=s:"+svcid, "", "http://localhost")
