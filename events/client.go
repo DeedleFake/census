@@ -11,14 +11,14 @@ const (
 	DefaultEnv  = "ps2"
 )
 
-type EventClient struct {
+type Client struct {
 	c *websocket.Conn
 
 	e *json.Encoder
 	d *json.Decoder
 }
 
-func New(base, env, svcid string) (*EventClient, error) {
+func NewClient(base, env, svcid string) (*Client, error) {
 	if base == "" {
 		base = DefaultBase
 	}
@@ -31,7 +31,7 @@ func New(base, env, svcid string) (*EventClient, error) {
 		return nil, err
 	}
 
-	return &EventClient{
+	return &Client{
 		c: c,
 
 		e: json.NewEncoder(c),
@@ -39,7 +39,7 @@ func New(base, env, svcid string) (*EventClient, error) {
 	}, nil
 }
 
-func (c *EventClient) Close() error {
+func (c *Client) Close() error {
 	err := c.c.Close()
 	if err != nil {
 		return err
@@ -52,13 +52,13 @@ func (c *EventClient) Close() error {
 	return nil
 }
 
-func (c *EventClient) Conn() net.Conn {
+func (c *Client) Conn() net.Conn {
 	return c.c
 }
 
 // This is somewhat problematic as it causes arbitrary JSON to get
 // sent as part of the event stream.
-func (c *EventClient) echo(payload interface{}) error {
+func (c *Client) echo(payload interface{}) error {
 	return c.e.Encode(&struct {
 		Service string      `json:"service"`
 		Action  string      `json:"action"`
@@ -70,7 +70,7 @@ func (c *EventClient) echo(payload interface{}) error {
 	})
 }
 
-func (c *EventClient) sub(action string, events []Sub) error {
+func (c *Client) sub(action string, events []Sub) error {
 	if len(events) == 0 {
 		return nil
 	}
@@ -98,15 +98,15 @@ func (c *EventClient) sub(action string, events []Sub) error {
 	return c.e.Encode(sub)
 }
 
-func (c *EventClient) Subscribe(events ...Sub) error {
+func (c *Client) Subscribe(events ...Sub) error {
 	return c.sub("subscribe", events)
 }
 
-func (c *EventClient) Unsubscribe(events ...Sub) error {
+func (c *Client) Unsubscribe(events ...Sub) error {
 	return c.sub("clearSubscribe", events)
 }
 
-func (c *EventClient) Next() (ev Event, err error) {
+func (c *Client) Next() (ev Event, err error) {
 	for (ev == nil) && (err == nil) {
 		var raw json.RawMessage
 		err = c.d.Decode(&raw)
