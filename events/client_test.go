@@ -1,11 +1,11 @@
-package census
+package events
 
 //func TestEcho(t *testing.T) {
 //	const test = "This is a test."
 //
-//	c, err := NewEventClient("", "", "example")
+//	c, err := NewClient("", "", "example")
 //	if err != nil {
-//		t.Fatalf("Failed to create EventClient: %v", err)
+//		t.Fatalf("Failed to create Client: %v", err)
 //	}
 //	defer c.Close()
 //

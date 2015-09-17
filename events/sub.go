@@ -1,4 +1,4 @@
-package census
+package events
 
 type Sub interface {
 	name() string

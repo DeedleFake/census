@@ -1,4 +1,4 @@
-package census
+package events
 
 import (
 	"reflect"
