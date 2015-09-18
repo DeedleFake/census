@@ -20,7 +20,7 @@ func eventFromRaw(raw []byte) (Event, error) {
 		return nil, err
 	}
 
-	var ev interface{}
+	var ev Event
 	switch common.Type {
 	case "connectionStateChanged":
 		ev = new(ConnectionStateChangedEvent)
@@ -41,7 +41,7 @@ func eventFromRaw(raw []byte) (Event, error) {
 		return nil, err
 	}
 
-	return ev.(Event), nil
+	return ev, nil
 }
 
 func heartbeat(raw []byte) (Event, error) {
@@ -73,7 +73,7 @@ func serviceMessage(raw []byte) (Event, error) {
 		return nil, err
 	}
 
-	var ev interface{}
+	var ev Event
 	switch common.EventName {
 	case "AchievementEarned":
 		ev = new(AchievementEarnedEvent)
@@ -92,7 +92,7 @@ func serviceMessage(raw []byte) (Event, error) {
 		return nil, err
 	}
 
-	return ev.(Event), nil
+	return ev, nil
 }
 
 // UnknownEventTypeError is returned by event stream readers that
