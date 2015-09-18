@@ -13,7 +13,10 @@ func main() {
 	defer c.Close()
 
 	err = c.Subscribe(events.Sub{
-		Events: []string{"FacilityControl"},
+		Events: []string{
+			"BattleRankUp",
+			"FacilityControl",
+		},
 		Chars:  events.SubAll,
 		Worlds: events.SubAll,
 	})
@@ -44,6 +47,12 @@ func main() {
 					ev.OldFactionID,
 				)
 			}
+
+		case *events.BattleRankUpEvent:
+			if ev.BattleRank >= 90 {
+				fmt.Printf("Congratulations to %v on reaching level %v.\n", ev.CharacterID, ev.BattleRank)
+			}
+
 		default:
 			fmt.Printf("%#v\n", ev)
 		}
