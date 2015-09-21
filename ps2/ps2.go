@@ -4,7 +4,7 @@ import (
 	"strconv"
 )
 
-// World is a convience type for dealing with PlanetSide 2 world IDs.
+// World is a convenience type for dealing with PlanetSide 2 world IDs.
 type World int
 
 const (
@@ -35,7 +35,7 @@ func (w World) String() string {
 	panic("Unknown world ID: " + strconv.FormatInt(int64(w), 10))
 }
 
-// Faction is a convience type for dealing with PlanetSide 2 faction
+// Faction is a convenience type for dealing with PlanetSide 2 faction
 // IDs.
 type Faction int
 
@@ -59,4 +59,41 @@ func (f Faction) String() string {
 	}
 
 	panic("Unknown faction ID: " + strconv.FormatInt(int64(f), 10))
+}
+
+// Zone is a convenience type for dealing PlanetSide 2 zone IDs.
+type Zone int
+
+const (
+	Indar        Zone = 2
+	Hossin       Zone = 4
+	Amerish      Zone = 6
+	Esamir       Zone = 8
+	VRTrainingNC Zone = 96
+	VRTrainingTR Zone = 97
+	VRTrainingVS Zone = 98
+	Cleanroom    Zone = 200
+)
+
+func (z Zone) String() string {
+	switch z {
+	case Indar:
+		return "Indar"
+	case Hossin:
+		return "Hossin"
+	case Amerish:
+		return "Amerish"
+	case Esamir:
+		return "Esamir"
+	case VRTrainingNC:
+		return "VR Training (NC)"
+	case VRTrainingTR:
+		return "VR Training (TR)"
+	case VRTrainingVS:
+		return "VR Training (VS)"
+	case Cleanroom:
+		return "Cleanroom"
+	}
+
+	panic("Unkown zone ID: " + strconv.FormatInt(int64(z), 10))
 }

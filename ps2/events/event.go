@@ -83,6 +83,8 @@ func serviceMessage(raw []byte) (Event, error) {
 		ev = new(DeathEvent)
 	case "FacilityControl":
 		ev = new(FacilityControlEvent)
+	case "GainExperience":
+		ev = new(GainExperienceEvent)
 	default:
 		return nil, UnknownEventTypeError(common.EventName)
 	}
@@ -191,4 +193,94 @@ type FacilityControlEvent struct {
 
 func (ev FacilityControlEvent) Type() string {
 	return "FacilityControl"
+}
+
+type GainExperienceEvent struct {
+	Amount       int       `json:"amount,string"`
+	CharacterID  int       `json:"character_id,string"`
+	ExperienceID int       `json:"experience_id,string"`
+	LoadoutID    int       `json:"loadout_id,string"`
+	OtherID      int       `json:"other_id,string"`
+	Timestamp    int64     `json:"timestamp,string"`
+	WorldID      ps2.World `json:"world_id,string"`
+	ZoneID       int       `json:"zone_id,string"`
+}
+
+func (ev GainExperienceEvent) Type() string {
+	return "GainExperience"
+}
+
+type ItemAddedEvent struct {
+	CharacterID int    `json:"character_id,string"`
+	Context     string `json:"context"`
+	ItemCount   int    `json:"item_count,string"`
+	ItemID      int    `json:"item_id,string"`
+	Timestamp   int64  `json:"timestamp,string"`
+	WorldID     int    `json:"world_id,string"`
+	ZoneID      int    `json:"zone_id,string"`
+}
+
+// I'm not sure what these types should be.
+//type MetagameEventEvent struct {
+//	ExperienceBonus string `json:"experience_bonus"`
+//	FactionNc       string `json:"faction_nc"`
+//	FactionTr       string `json:"faction_tr"`
+//	FactionVs       string `json:"faction_vs"`
+//	MetagameID      string `json:"metagame_event_id"`
+//	MetagameState   string `json:"metagame_event_state"`
+//	Timestamp       string `json:"timestamp"`
+//	WorldID         string `json:"world_id"`
+//	ZoneID          string `json:"zone_id"`
+//}
+
+type PlayerFacilityCaptureEvent struct {
+	CharacterID int       `json:"character_id,string"`
+	FacilityID  int       `json:"facility_id,string"`
+	OutfitID    int       `json:"outfit_id,string"`
+	Timestamp   int64     `json:"timestamp,string"`
+	WorldID     ps2.World `json:"world_id,string"`
+	ZoneID      int       `json:"zone_id,string"`
+}
+
+type PlayerFacilityDefendEvent struct {
+	CharacterID int       `json:"character_id,string"`
+	FacilityID  int       `json:"facility_id,string"`
+	OutfitID    int       `json:"outfit_id,string"`
+	Timestamp   int64     `json:"timestamp,string"`
+	WorldID     ps2.World `json:"world_id,string"`
+	ZoneID      int       `json:"zone_id,string"`
+}
+
+type PlayerLoginEvent struct {
+	CharacterID int       `json:"character_id,string"`
+	Timestamp   int64     `json:"timestamp,string"`
+	WorldID     ps2.World `json:"world_id,string"`
+}
+
+type PlayerLogoutEvent struct {
+	CharacterID int       `json:"character_id,string"`
+	Timestamp   int64     `json:"timestamp,string"`
+	WorldID     ps2.World `json:"world_id,string"`
+}
+
+type SkillAddedEvent struct {
+	CharacterID int       `json:"character_id,string"`
+	SkillID     int       `json:"skill_id,string"`
+	Timestamp   int64     `json:"timestamp,string"`
+	WorldID     ps2.World `json:"world_id,string"`
+	ZoneID      int       `json:"zone_id,string"`
+}
+
+type VehicleDestroyEvent struct {
+	AttackerCharacterID int         `json:"attacker_character_id,string"`
+	AttackerLoadoutID   int         `json:"attacker_loadout_id,string"`
+	AttackerVehicleID   int         `json:"attacker_vehicle_id,string"`
+	AttackerWeaponID    int         `json:"attacker_weapon_id,string"`
+	CharacterID         int         `json:"character_id,string"`
+	FacilityID          int         `json:"facility_id,string"`
+	FactionID           ps2.Faction `json:"faction_id,string"`
+	Timestamp           int64       `json:"timestamp,string"`
+	VehicleID           int         `json:"vehicle_id,string"`
+	WorldID             ps2.World   `json:"world_id,string"`
+	ZoneID              int         `json:"zone_id,string"`
 }
