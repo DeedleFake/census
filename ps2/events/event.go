@@ -141,7 +141,7 @@ type AchievementEarnedEvent struct {
 	Timestamp     int64     `json:"timestamp,string"`
 	WorldID       ps2.World `json:"world_id,string"`
 	AchievementID int       `json:"achievement_id,string"`
-	ZoneID        int       `json:"zone_id,string"`
+	ZoneID        ps2.Zone  `json:"zone_id,string"`
 }
 
 func (ev AchievementEarnedEvent) Type() string {
@@ -153,7 +153,7 @@ type BattleRankUpEvent struct {
 	CharacterID int       `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
-	ZoneID      int       `json:"zone_id,string"`
+	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 func (ev BattleRankUpEvent) Type() string {
@@ -173,7 +173,7 @@ type DeathEvent struct {
 	Timestamp           int64     `json:"timestamp,string"`
 	VehicleID           int       `json:"vehicle_id,string"`
 	WorldID             ps2.World `json:"world_id,string"`
-	ZoneID              int       `json:"zone_id,string"`
+	ZoneID              ps2.Zone  `json:"zone_id,string"`
 }
 
 func (ev DeathEvent) Type() string {
@@ -188,7 +188,7 @@ type FacilityControlEvent struct {
 	OutfitID     int         `json:"outfit_id,string"`
 	Timestamp    int64       `json:"timestamp,string"`
 	WorldID      ps2.World   `json:"world_id,string"`
-	ZoneID       int         `json:"zone_id,string"`
+	ZoneID       ps2.Zone    `json:"zone_id,string"`
 }
 
 func (ev FacilityControlEvent) Type() string {
@@ -203,7 +203,7 @@ type GainExperienceEvent struct {
 	OtherID      int       `json:"other_id,string"`
 	Timestamp    int64     `json:"timestamp,string"`
 	WorldID      ps2.World `json:"world_id,string"`
-	ZoneID       int       `json:"zone_id,string"`
+	ZoneID       ps2.Zone  `json:"zone_id,string"`
 }
 
 func (ev GainExperienceEvent) Type() string {
@@ -211,13 +211,13 @@ func (ev GainExperienceEvent) Type() string {
 }
 
 type ItemAddedEvent struct {
-	CharacterID int    `json:"character_id,string"`
-	Context     string `json:"context"`
-	ItemCount   int    `json:"item_count,string"`
-	ItemID      int    `json:"item_id,string"`
-	Timestamp   int64  `json:"timestamp,string"`
-	WorldID     int    `json:"world_id,string"`
-	ZoneID      int    `json:"zone_id,string"`
+	CharacterID int      `json:"character_id,string"`
+	Context     string   `json:"context"`
+	ItemCount   int      `json:"item_count,string"`
+	ItemID      int      `json:"item_id,string"`
+	Timestamp   int64    `json:"timestamp,string"`
+	WorldID     int      `json:"world_id,string"`
+	ZoneID      ps2.Zone `json:"zone_id,string"`
 }
 
 // I'm not sure what these types should be.
@@ -239,7 +239,7 @@ type PlayerFacilityCaptureEvent struct {
 	OutfitID    int       `json:"outfit_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
-	ZoneID      int       `json:"zone_id,string"`
+	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type PlayerFacilityDefendEvent struct {
@@ -248,7 +248,7 @@ type PlayerFacilityDefendEvent struct {
 	OutfitID    int       `json:"outfit_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
-	ZoneID      int       `json:"zone_id,string"`
+	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type PlayerLoginEvent struct {
@@ -268,7 +268,7 @@ type SkillAddedEvent struct {
 	SkillID     int       `json:"skill_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
-	ZoneID      int       `json:"zone_id,string"`
+	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type VehicleDestroyEvent struct {
@@ -282,5 +282,5 @@ type VehicleDestroyEvent struct {
 	Timestamp           int64       `json:"timestamp,string"`
 	VehicleID           int         `json:"vehicle_id,string"`
 	WorldID             ps2.World   `json:"world_id,string"`
-	ZoneID              int         `json:"zone_id,string"`
+	ZoneID              ps2.Zone    `json:"zone_id,string"`
 }
