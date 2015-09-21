@@ -34,16 +34,18 @@ func main() {
 		case *events.FacilityControlEvent:
 			switch ev.NewFactionID {
 			case ev.OldFactionID:
-				fmt.Printf("%v: The %v maintainted ownership of %v.\n",
+				fmt.Printf("%v: The %v maintainted ownership of %v on %v.\n",
 					ev.WorldID,
 					ev.NewFactionID,
 					ev.FacilityID,
+					ev.ZoneID,
 				)
 			default:
-				fmt.Printf("%v: The %v captured %v from the %v.\n",
+				fmt.Printf("%v: The %v captured %v on %v from the %v.\n",
 					ev.WorldID,
 					ev.NewFactionID,
 					ev.FacilityID,
+					ev.ZoneID,
 					ev.OldFactionID,
 				)
 			}
