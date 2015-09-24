@@ -83,6 +83,20 @@ func serviceMessage(raw []byte) (Event, error) {
 		ev = new(FacilityControl)
 	case "GainExperience":
 		ev = new(GainExperience)
+	case "ItemAdded":
+		ev = new(ItemAdded)
+	case "PlayerFacilityCapture":
+		ev = new(PlayerFacilityCapture)
+	case "PlayerFacilityDefend":
+		ev = new(PlayerFacilityDefend)
+	case "PlayerLogin":
+		ev = new(PlayerLogin)
+	case "PlayerLogout":
+		ev = new(PlayerLogout)
+	case "SkillAdded":
+		ev = new(SkillAdded)
+	case "VehicleDestroy":
+		ev = new(VehicleDestroy)
 	default:
 		return nil, UnknownEventTypeError(common.EventName)
 	}
