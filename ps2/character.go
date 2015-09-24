@@ -75,7 +75,18 @@ type Character struct {
 		ImagePath      string            `json:"image_path"`
 		CodeTag        string            `json:"code_tag"`
 		UserSelectable int               `json:"user_selectable,string"`
-	}
+	} `json:"faction"`
+
+	Stats []struct {
+		StatName        string `json:"stat_name"`
+		ProfileID       int64  `json:"profile_id,string"`
+		ValueForever    int    `json:"value_forever,string"`
+		ValueMonthly    int    `json:"value_monthly,string"`
+		ValueWeekly     int    `json:"value_weekly,string"`
+		ValueDaily      int    `json:"value_daily,string"`
+		ValueOneLifeMax int    `json:"value_one_life_max,string"`
+		LastSave        int64  `json:"last_save,string"`
+	} `json:"stats"`
 
 	OnlineStatus int `json:"online_status,string"`
 
