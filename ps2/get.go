@@ -17,9 +17,16 @@ func (g *Get) Custom(out interface{}, col string, search map[string]string, conf
 
 	dec := json.NewDecoder(rsp.Body)
 
-	data := map[string]interface{}{
-		col + "_list": out,
+	var data map[string]json.RawMessage
+	err = dec.Decode(&data)
+	if err != nil {
+		return err
 	}
 
-	return dec.Decode(&data)
+	list, ok := data[col+"_list"]
+	if !ok {
+		return UnknownCollectionError(col)
+	}
+
+	return json.Unmarshal(list, out)
 }

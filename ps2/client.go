@@ -193,3 +193,9 @@ func (dir SortDir) String() string {
 
 	return dir.Field + ":" + d
 }
+
+type UnknownCollectionError string
+
+func (err UnknownCollectionError) Error() string {
+	return "Unknown collection: " + string(err)
+}
