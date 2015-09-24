@@ -38,7 +38,7 @@ func main() {
 		}
 
 		switch ev := ev.(type) {
-		case *events.FacilityControlEvent:
+		case *events.FacilityControl:
 			switch ev.NewFactionID {
 			case ev.OldFactionID:
 				log.Printf("%v: The %v maintainted ownership of %v on %v.\n",
@@ -57,7 +57,7 @@ func main() {
 				)
 			}
 
-		case *events.BattleRankUpEvent:
+		case *events.BattleRankUp:
 			chars, err := c.Get().Character(
 				map[string]string{
 					"character_id": strconv.FormatInt(int64(ev.CharacterID), 10),

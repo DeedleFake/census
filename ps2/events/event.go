@@ -6,9 +6,7 @@ import (
 )
 
 // Event represents a message read from an event stream.
-type Event interface {
-	Type() string
-}
+type Event interface{}
 
 func eventFromRaw(raw []byte) (Event, error) {
 	var common struct {
@@ -23,9 +21,9 @@ func eventFromRaw(raw []byte) (Event, error) {
 	var ev Event
 	switch common.Type {
 	case "connectionStateChanged":
-		ev = new(ConnectionStateChangedEvent)
+		ev = new(ConnectionStateChanged)
 	case "serviceStateChanged":
-		ev = new(ServiceStateChangedEvent)
+		ev = new(ServiceStateChanged)
 	case "heartbeat":
 		return heartbeat(raw)
 	case "serviceMessage":
@@ -46,7 +44,7 @@ func eventFromRaw(raw []byte) (Event, error) {
 
 func heartbeat(raw []byte) (Event, error) {
 	var outer struct {
-		Online HeartbeatEvent `json:"online"`
+		Online Heartbeat `json:"online"`
 	}
 	err := json.Unmarshal(raw, &outer)
 	if err != nil {
@@ -76,15 +74,15 @@ func serviceMessage(raw []byte) (Event, error) {
 	var ev Event
 	switch common.EventName {
 	case "AchievementEarned":
-		ev = new(AchievementEarnedEvent)
+		ev = new(AchievementEarned)
 	case "BattleRankUp":
-		ev = new(BattleRankUpEvent)
+		ev = new(BattleRankUp)
 	case "Death":
-		ev = new(DeathEvent)
+		ev = new(Death)
 	case "FacilityControl":
-		ev = new(FacilityControlEvent)
+		ev = new(FacilityControl)
 	case "GainExperience":
-		ev = new(GainExperienceEvent)
+		ev = new(GainExperience)
 	default:
 		return nil, UnknownEventTypeError(common.EventName)
 	}
@@ -106,24 +104,16 @@ func (err UnknownEventTypeError) Error() string {
 	return "Unknown event type: " + string(err)
 }
 
-type ConnectionStateChangedEvent struct {
+type ConnectionStateChanged struct {
 	Connected bool `json:"connected,string"`
 }
 
-func (ev ConnectionStateChangedEvent) Type() string {
-	return "connectionStateChanged"
-}
-
-type ServiceStateChangedEvent struct {
+type ServiceStateChanged struct {
 	Detail string `json:"detail"`
 	Online bool   `json:"online,string"`
 }
 
-func (ev ServiceStateChangedEvent) Type() string {
-	return "serviceStateChanged"
-}
-
-type HeartbeatEvent struct {
+type Heartbeat struct {
 	Briggs  bool `json:"EventServerEndpoint_Briggs_25,string"`
 	Cobalt  bool `json:"EventServerEndpoint_Cobalt_13,string"`
 	Connery bool `json:"EventServerEndpoint_Connery_1,string"`
@@ -132,11 +122,7 @@ type HeartbeatEvent struct {
 	Miller  bool `json:"EventServerEndpoint_Miller_10,string"`
 }
 
-func (ev HeartbeatEvent) Type() string {
-	return "heartbeat"
-}
-
-type AchievementEarnedEvent struct {
+type AchievementEarned struct {
 	CharacterID   int       `json:"character_id,string"`
 	Timestamp     int64     `json:"timestamp,string"`
 	WorldID       ps2.World `json:"world_id,string"`
@@ -144,11 +130,7 @@ type AchievementEarnedEvent struct {
 	ZoneID        ps2.Zone  `json:"zone_id,string"`
 }
 
-func (ev AchievementEarnedEvent) Type() string {
-	return "AchievementEarned"
-}
-
-type BattleRankUpEvent struct {
+type BattleRankUp struct {
 	BattleRank  int       `json:"battle_rank,string"`
 	CharacterID int       `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
@@ -156,11 +138,7 @@ type BattleRankUpEvent struct {
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
-func (ev BattleRankUpEvent) Type() string {
-	return "BattleRankUp"
-}
-
-type DeathEvent struct {
+type Death struct {
 	AttackerCharacterID int       `json:"attacker_character_id,string"`
 	AttackerFireModeID  int       `json:"attacker_fire_mode_id,string"`
 	AttackerLoadoutID   int       `json:"attacker_loadout_id,string"`
@@ -176,11 +154,7 @@ type DeathEvent struct {
 	ZoneID              ps2.Zone  `json:"zone_id,string"`
 }
 
-func (ev DeathEvent) Type() string {
-	return "Death"
-}
-
-type FacilityControlEvent struct {
+type FacilityControl struct {
 	DurationHeld int         `json:"duration_held,string"`
 	FacilityID   int         `json:"facility_id,string"`
 	NewFactionID ps2.Faction `json:"new_faction_id,string"`
@@ -191,11 +165,7 @@ type FacilityControlEvent struct {
 	ZoneID       ps2.Zone    `json:"zone_id,string"`
 }
 
-func (ev FacilityControlEvent) Type() string {
-	return "FacilityControl"
-}
-
-type GainExperienceEvent struct {
+type GainExperience struct {
 	Amount       int       `json:"amount,string"`
 	CharacterID  int       `json:"character_id,string"`
 	ExperienceID int       `json:"experience_id,string"`
@@ -206,11 +176,7 @@ type GainExperienceEvent struct {
 	ZoneID       ps2.Zone  `json:"zone_id,string"`
 }
 
-func (ev GainExperienceEvent) Type() string {
-	return "GainExperience"
-}
-
-type ItemAddedEvent struct {
+type ItemAdded struct {
 	CharacterID int      `json:"character_id,string"`
 	Context     string   `json:"context"`
 	ItemCount   int      `json:"item_count,string"`
@@ -221,7 +187,7 @@ type ItemAddedEvent struct {
 }
 
 // I'm not sure what these types should be.
-//type MetagameEventEvent struct {
+//type MetagameEvent struct {
 //	ExperienceBonus string `json:"experience_bonus"`
 //	FactionNc       string `json:"faction_nc"`
 //	FactionTr       string `json:"faction_tr"`
@@ -233,7 +199,7 @@ type ItemAddedEvent struct {
 //	ZoneID          string `json:"zone_id"`
 //}
 
-type PlayerFacilityCaptureEvent struct {
+type PlayerFacilityCapture struct {
 	CharacterID int       `json:"character_id,string"`
 	FacilityID  int       `json:"facility_id,string"`
 	OutfitID    int       `json:"outfit_id,string"`
@@ -242,7 +208,7 @@ type PlayerFacilityCaptureEvent struct {
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
-type PlayerFacilityDefendEvent struct {
+type PlayerFacilityDefend struct {
 	CharacterID int       `json:"character_id,string"`
 	FacilityID  int       `json:"facility_id,string"`
 	OutfitID    int       `json:"outfit_id,string"`
@@ -251,19 +217,19 @@ type PlayerFacilityDefendEvent struct {
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
-type PlayerLoginEvent struct {
+type PlayerLogin struct {
 	CharacterID int       `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 }
 
-type PlayerLogoutEvent struct {
+type PlayerLogout struct {
 	CharacterID int       `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 }
 
-type SkillAddedEvent struct {
+type SkillAdded struct {
 	CharacterID int       `json:"character_id,string"`
 	SkillID     int       `json:"skill_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
@@ -271,7 +237,7 @@ type SkillAddedEvent struct {
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
-type VehicleDestroyEvent struct {
+type VehicleDestroy struct {
 	AttackerCharacterID int         `json:"attacker_character_id,string"`
 	AttackerLoadoutID   int         `json:"attacker_loadout_id,string"`
 	AttackerVehicleID   int         `json:"attacker_vehicle_id,string"`
