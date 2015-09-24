@@ -103,6 +103,7 @@ type Config struct {
 	Hide            []string
 	Sort            Sort
 	Has             []string
+	Resolve         []string
 	IgnoreCase      bool
 	Limit           int
 	LimitPerDB      int
@@ -129,6 +130,10 @@ func (c *Config) addToQuery(q url.Values) {
 
 	if len(c.Has) > 0 {
 		q.Set("c:has", strings.Join(c.Has, ","))
+	}
+
+	if len(c.Resolve) > 0 {
+		q.Set("c:resolve", strings.Join(c.Resolve, ","))
 	}
 
 	if c.IgnoreCase {

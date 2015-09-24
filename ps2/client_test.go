@@ -41,6 +41,7 @@ func TestConfigAddToQuery(t *testing.T) {
 			},
 		},
 		Has:             []string{"has1", "has2"},
+		Resolve:         []string{"resolve1", "resolve2"},
 		IgnoreCase:      true,
 		Limit:           3,
 		LimitPerDB:      9,
@@ -58,6 +59,7 @@ func TestConfigAddToQuery(t *testing.T) {
 	ex.Set("c:hide", "hide1,hide2")
 	ex.Set("c:sort", "sort1:1,sort2:-1")
 	ex.Set("c:has", "has1,has2")
+	ex.Set("c:resolve", "resolve1,resolve2")
 	ex.Set("c:case", "false")
 	ex.Set("c:limit", "3")
 	ex.Set("c:limitPerDB", "9")
@@ -76,13 +78,19 @@ func ExampleClient() {
 	var c Client
 	chars, err := c.Get().Character(
 		map[string]string{
-			"name.first": "DeedleFakeTR",
+			"name.first": "^DeedleFake",
 		},
 		&Config{
 			Show: []string{
 				"name",
 				"battle_rank",
 			},
+			Sort: Sort{
+				{
+					Field: "times.creation",
+				},
+			},
+			Limit: 3,
 		},
 	)
 	if err != nil {
@@ -90,8 +98,10 @@ func ExampleClient() {
 	}
 
 	for _, c := range chars {
-		fmt.Printf("%v (%v)\n", c.Name.First, c.BattleRank.Value)
+		fmt.Printf("%v\n", c.Name.First)
 	}
 
-	// Output: DeedleFakeTR (100)
+	// Output: DeedleFake
+	// DeedleFakeConnery
+	// DeedleFakeTR
 }
