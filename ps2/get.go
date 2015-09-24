@@ -2,7 +2,6 @@ package ps2
 
 import (
 	"encoding/json"
-	"io/ioutil"
 )
 
 type Get struct {

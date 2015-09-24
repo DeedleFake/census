@@ -137,43 +137,43 @@ type Heartbeat struct {
 }
 
 type AchievementEarned struct {
-	CharacterID   int       `json:"character_id,string"`
+	CharacterID   int64     `json:"character_id,string"`
 	Timestamp     int64     `json:"timestamp,string"`
 	WorldID       ps2.World `json:"world_id,string"`
-	AchievementID int       `json:"achievement_id,string"`
+	AchievementID int64     `json:"achievement_id,string"`
 	ZoneID        ps2.Zone  `json:"zone_id,string"`
 }
 
 type BattleRankUp struct {
 	BattleRank  int       `json:"battle_rank,string"`
-	CharacterID int       `json:"character_id,string"`
+	CharacterID int64     `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type Death struct {
-	AttackerCharacterID int       `json:"attacker_character_id,string"`
-	AttackerFireModeID  int       `json:"attacker_fire_mode_id,string"`
-	AttackerLoadoutID   int       `json:"attacker_loadout_id,string"`
-	AttackerVehicleID   int       `json:"attacker_vehicle_id,string"`
-	AttackerWeaponID    int       `json:"attacker_weapon_id,string"`
-	CharacterID         int       `json:"character_id,string"`
-	CharacterLoadoutID  int       `json:"character_loadout_id,string"`
+	AttackerCharacterID int64     `json:"attacker_character_id,string"`
+	AttackerFireModeID  int64     `json:"attacker_fire_mode_id,string"`
+	AttackerLoadoutID   int64     `json:"attacker_loadout_id,string"`
+	AttackerVehicleID   int64     `json:"attacker_vehicle_id,string"`
+	AttackerWeaponID    int64     `json:"attacker_weapon_id,string"`
+	CharacterID         int64     `json:"character_id,string"`
+	CharacterLoadoutID  int64     `json:"character_loadout_id,string"`
 	IsCritical          int       `json:"is_critical,string"`
 	IsHeadshot          int       `json:"is_headshot,string"`
 	Timestamp           int64     `json:"timestamp,string"`
-	VehicleID           int       `json:"vehicle_id,string"`
+	VehicleID           int64     `json:"vehicle_id,string"`
 	WorldID             ps2.World `json:"world_id,string"`
 	ZoneID              ps2.Zone  `json:"zone_id,string"`
 }
 
 type FacilityControl struct {
 	DurationHeld int         `json:"duration_held,string"`
-	FacilityID   int         `json:"facility_id,string"`
+	FacilityID   int64       `json:"facility_id,string"`
 	NewFactionID ps2.Faction `json:"new_faction_id,string"`
 	OldFactionID ps2.Faction `json:"old_faction_id,string"`
-	OutfitID     int         `json:"outfit_id,string"`
+	OutfitID     int64       `json:"outfit_id,string"`
 	Timestamp    int64       `json:"timestamp,string"`
 	WorldID      ps2.World   `json:"world_id,string"`
 	ZoneID       ps2.Zone    `json:"zone_id,string"`
@@ -181,22 +181,22 @@ type FacilityControl struct {
 
 type GainExperience struct {
 	Amount       int       `json:"amount,string"`
-	CharacterID  int       `json:"character_id,string"`
-	ExperienceID int       `json:"experience_id,string"`
-	LoadoutID    int       `json:"loadout_id,string"`
-	OtherID      int       `json:"other_id,string"`
+	CharacterID  int64     `json:"character_id,string"`
+	ExperienceID int64     `json:"experience_id,string"`
+	LoadoutID    int64     `json:"loadout_id,string"`
+	OtherID      int64     `json:"other_id,string"`
 	Timestamp    int64     `json:"timestamp,string"`
 	WorldID      ps2.World `json:"world_id,string"`
 	ZoneID       ps2.Zone  `json:"zone_id,string"`
 }
 
 type ItemAdded struct {
-	CharacterID int      `json:"character_id,string"`
+	CharacterID int64    `json:"character_id,string"`
 	Context     string   `json:"context"`
 	ItemCount   int      `json:"item_count,string"`
-	ItemID      int      `json:"item_id,string"`
+	ItemID      int64    `json:"item_id,string"`
 	Timestamp   int64    `json:"timestamp,string"`
-	WorldID     int      `json:"world_id,string"`
+	WorldID     int64    `json:"world_id,string"`
 	ZoneID      ps2.Zone `json:"zone_id,string"`
 }
 
@@ -214,53 +214,53 @@ type ItemAdded struct {
 //}
 
 type PlayerFacilityCapture struct {
-	CharacterID int       `json:"character_id,string"`
-	FacilityID  int       `json:"facility_id,string"`
-	OutfitID    int       `json:"outfit_id,string"`
+	CharacterID int64     `json:"character_id,string"`
+	FacilityID  int64     `json:"facility_id,string"`
+	OutfitID    int64     `json:"outfit_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type PlayerFacilityDefend struct {
-	CharacterID int       `json:"character_id,string"`
-	FacilityID  int       `json:"facility_id,string"`
-	OutfitID    int       `json:"outfit_id,string"`
+	CharacterID int64     `json:"character_id,string"`
+	FacilityID  int64     `json:"facility_id,string"`
+	OutfitID    int64     `json:"outfit_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type PlayerLogin struct {
-	CharacterID int       `json:"character_id,string"`
+	CharacterID int64     `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 }
 
 type PlayerLogout struct {
-	CharacterID int       `json:"character_id,string"`
+	CharacterID int64     `json:"character_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 }
 
 type SkillAdded struct {
-	CharacterID int       `json:"character_id,string"`
-	SkillID     int       `json:"skill_id,string"`
+	CharacterID int64     `json:"character_id,string"`
+	SkillID     int64     `json:"skill_id,string"`
 	Timestamp   int64     `json:"timestamp,string"`
 	WorldID     ps2.World `json:"world_id,string"`
 	ZoneID      ps2.Zone  `json:"zone_id,string"`
 }
 
 type VehicleDestroy struct {
-	AttackerCharacterID int         `json:"attacker_character_id,string"`
-	AttackerLoadoutID   int         `json:"attacker_loadout_id,string"`
-	AttackerVehicleID   int         `json:"attacker_vehicle_id,string"`
-	AttackerWeaponID    int         `json:"attacker_weapon_id,string"`
-	CharacterID         int         `json:"character_id,string"`
-	FacilityID          int         `json:"facility_id,string"`
+	AttackerCharacterID int64       `json:"attacker_character_id,string"`
+	AttackerLoadoutID   int64       `json:"attacker_loadout_id,string"`
+	AttackerVehicleID   int64       `json:"attacker_vehicle_id,string"`
+	AttackerWeaponID    int64       `json:"attacker_weapon_id,string"`
+	CharacterID         int64       `json:"character_id,string"`
+	FacilityID          int64       `json:"facility_id,string"`
 	FactionID           ps2.Faction `json:"faction_id,string"`
 	Timestamp           int64       `json:"timestamp,string"`
-	VehicleID           int         `json:"vehicle_id,string"`
+	VehicleID           int64       `json:"vehicle_id,string"`
 	WorldID             ps2.World   `json:"world_id,string"`
 	ZoneID              ps2.Zone    `json:"zone_id,string"`
 }

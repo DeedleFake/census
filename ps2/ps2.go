@@ -5,7 +5,7 @@ import (
 )
 
 // World is a convenience type for dealing with PlanetSide 2 world IDs.
-type World int
+type World int64
 
 const (
 	Connery World = 1
@@ -37,7 +37,7 @@ func (w World) String() string {
 
 // Faction is a convenience type for dealing with PlanetSide 2 faction
 // IDs.
-type Faction int
+type Faction int64
 
 const (
 	NaniteSystems   Faction = 0
@@ -62,7 +62,7 @@ func (f Faction) String() string {
 }
 
 // Zone is a convenience type for dealing PlanetSide 2 zone IDs.
-type Zone int
+type Zone int64
 
 const (
 	Indar        Zone = 2
