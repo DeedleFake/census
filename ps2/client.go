@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"net/http"
 	"net/url"
+	"strconv"
 	"strings"
+	"sync"
 )
 
 const (
@@ -52,6 +54,14 @@ func (c *Client) serviceID() string {
 	return c.ServiceID
 }
 
+var (
+	bufPool = sync.Pool{
+		New: func() interface{} {
+			return new(bytes.Buffer)
+		},
+	}
+)
+
 func (c *Client) buildURL(t string, col string, search map[string]string, config *Config) string {
 	q := make(url.Values)
 
@@ -61,7 +71,12 @@ func (c *Client) buildURL(t string, col string, search map[string]string, config
 
 	config.addToQuery(q)
 
-	var buf bytes.Buffer
+	buf := bufPool.Get().(*bytes.Buffer)
+	defer func() {
+		buf.Reset()
+		bufPool.Put(buf)
+	}()
+
 	buf.WriteString(c.base())
 	buf.WriteString("/s:")
 	buf.WriteString(c.serviceID())
@@ -84,7 +99,9 @@ func (c *Client) Get() *Get {
 }
 
 type Config struct {
-	Show []string
+	Show       []string
+	Limit      int
+	LimitPerDB int
 }
 
 func (c *Config) addToQuery(q url.Values) {
@@ -93,6 +110,14 @@ func (c *Config) addToQuery(q url.Values) {
 	}
 
 	if len(c.Show) > 0 {
-		q.Add("c:show", strings.Join(c.Show, ","))
+		q.Set("c:show", strings.Join(c.Show, ","))
+	}
+
+	if c.Limit > 0 {
+		q.Set("c:limit", strconv.FormatInt(int64(c.Limit), 10))
+	}
+
+	if c.LimitPerDB > 0 {
+		q.Set("c:limitPerDB", strconv.FormatInt(int64(c.LimitPerDB), 10))
 	}
 }
