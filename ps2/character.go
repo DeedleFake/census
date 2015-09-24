@@ -76,6 +76,15 @@ type Character struct {
 		StrafeSpeedModifier    float64           `json:"strafe_speed_modifier,string"`
 	} `json:"profile"`
 
+	Faction *struct {
+		Name           map[string]string `json:"faction"`
+		ImageSetID     int64             `json:"image_set_id,string"`
+		ImageID        int64             `json:"image_id,string"`
+		ImagePath      string            `json:"image_path"`
+		CodeTag        string            `json:"code_tag"`
+		UserSelectable int               `json:"user_selectable,string"`
+	}
+
 	OnlineStatus int `json:"online_status,string"`
 
 	FriendList []struct {

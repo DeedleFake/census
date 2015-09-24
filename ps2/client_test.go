@@ -81,14 +81,13 @@ func ExampleClient() {
 			"name.first": "^DeedleFake",
 		},
 		&Config{
-			Show: []string{
-				"name",
-				"battle_rank",
-			},
 			Sort: Sort{
 				{
 					Field: "times.creation",
 				},
+			},
+			Resolve: []string{
+				"faction",
 			},
 			Limit: 3,
 		},
@@ -98,10 +97,10 @@ func ExampleClient() {
 	}
 
 	for _, c := range chars {
-		fmt.Printf("%v\n", c.Name.First)
+		fmt.Printf("%v (%v)\n", c.Name.First, c.Faction.CodeTag)
 	}
 
-	// Output: DeedleFake
-	// DeedleFakeConnery
-	// DeedleFakeTR
+	// Output: DeedleFake (NC)
+	// DeedleFakeConnery (VS)
+	// DeedleFakeTR (TR)
 }
