@@ -1,18 +1,24 @@
 package main
 
 import (
-	"fmt"
+	"github.com/DeedleFake/census/ps2"
 	"github.com/DeedleFake/census/ps2/events"
+	"log"
+	"strconv"
 )
 
+func init() {
+	log.SetFlags(0)
+}
+
 func main() {
-	c, err := events.NewClient("", "", "example")
+	ec, err := events.NewClient("", "", "example")
 	if err != nil {
 		panic(err)
 	}
-	defer c.Close()
+	defer ec.Close()
 
-	err = c.Subscribe(events.Sub{
+	err = ec.Subscribe(events.Sub{
 		Events: []string{
 			"BattleRankUp",
 			"FacilityControl",
@@ -24,8 +30,9 @@ func main() {
 		panic(err)
 	}
 
+	var c ps2.Client
 	for {
-		ev, err := c.Next()
+		ev, err := ec.Next()
 		if err != nil {
 			panic(err)
 		}
@@ -34,14 +41,14 @@ func main() {
 		case *events.FacilityControlEvent:
 			switch ev.NewFactionID {
 			case ev.OldFactionID:
-				fmt.Printf("%v: The %v maintainted ownership of %v on %v.\n",
+				log.Printf("%v: The %v maintainted ownership of %v on %v.\n",
 					ev.WorldID,
 					ev.NewFactionID,
 					ev.FacilityID,
 					ev.ZoneID,
 				)
 			default:
-				fmt.Printf("%v: The %v captured %v on %v from the %v.\n",
+				log.Printf("%v: The %v captured %v on %v from the %v.\n",
 					ev.WorldID,
 					ev.NewFactionID,
 					ev.FacilityID,
@@ -51,12 +58,23 @@ func main() {
 			}
 
 		case *events.BattleRankUpEvent:
-			if ev.BattleRank >= 90 {
-				fmt.Printf("Congratulations to %v on reaching level %v.\n", ev.CharacterID, ev.BattleRank)
+			chars, err := c.Get().Character(
+				map[string]string{
+					"character_id": strconv.FormatInt(int64(ev.CharacterID), 10),
+				},
+				&ps2.Config{
+					Show: []string{"name.first"},
+				},
+			)
+			if err != nil {
+				log.Printf("Error getting characters: %v", err)
+				continue
 			}
 
+			log.Printf("Congratulations to %v of %v on reaching level %v.\n", chars[0].Name.First, ev.WorldID, ev.BattleRank)
+
 		default:
-			fmt.Printf("%#v\n", ev)
+			log.Printf("%#v\n", ev)
 		}
 	}
 }
