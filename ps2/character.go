@@ -1,13 +1,5 @@
 package ps2
 
-import (
-	"encoding/json"
-)
-
-type Get struct {
-	c *Client
-}
-
 type Character struct {
 	CharacterID int64 `json:"character_id,string"`
 	Name        struct {
@@ -94,22 +86,11 @@ type Character struct {
 	} `json:"friend_list"`
 }
 
-func (g *Get) Character(search map[string]string, config *Config) ([]Character, error) {
-	rsp, err := g.c.c().Get(g.c.buildURL("get", "character", search, config))
-	if err != nil {
-		return nil, err
-	}
-	defer rsp.Body.Close()
-
-	dec := json.NewDecoder(rsp.Body)
-
-	var data struct {
-		List []Character `json:"character_list"`
-	}
-	err = dec.Decode(&data)
+func (g *Get) Character(search map[string]string, config *Config) (list []Character, err error) {
+	err = g.Custom(&list, "character", search, config)
 	if err != nil {
 		return nil, err
 	}
 
-	return data.List, nil
+	return
 }
