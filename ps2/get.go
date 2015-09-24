@@ -40,6 +40,50 @@ type Character struct {
 	DailyRibbon struct {
 		Count int `json:"count,string"`
 	} `json:"daily_ribbon"`
+
+	Items []struct {
+		ItemID     int64 `json:"item_id,string"`
+		StackCount int   `json:"stack_count,string"`
+	} `json:"items"`
+
+	ItemsFull []struct {
+		ItemID              int64             `json:"item_id,string"`
+		StackCount          int               `json:"stack_count,string"`
+		ItemTypeID          int64             `json:"item_type_id,string"`
+		ItemCategoryID      int64             `json:"item_category_id,string"`
+		IsVehicleWeapon     int               `json:"is_vehicle_weapon,string"`
+		Name                map[string]string `json:"name"`
+		Description         map[string]string `json:"description"`
+		FactionID           Faction           `json:"faction_id,string"`
+		MaxStackSize        int               `json:"max_stack_size,string"`
+		ImageSetID          int64             `json:"image_set_id,string"`
+		ImageID             int64             `json:"image_id,string"`
+		ImagePath           string            `json:"image_path"`
+		IsDefaultAttachment int               `json:"is_default_attachment,string"`
+	}
+
+	Profile *struct {
+		ProfileTypeID          int64             `json:"profile_type_id,string"`
+		ProfileTypeDescription string            `json:"profile_type_description"`
+		FactionID              Faction           `json:"faction_id,string"`
+		Name                   map[string]string `json:"name"`
+		Description            map[string]string `json:"description"`
+		ImageSetID             int64             `json:"image_set_id,string"`
+		ImageID                int64             `json:"image_id,string"`
+		ImagePath              string            `json:"image_path"`
+		MovementSpeed          int               `json:"movement_speed,string"`
+		BackpedalSpeedModifier float64           `json:"backpedal_speed_modifier,string"`
+		SprintSpeedModifier    float64           `json:"sprint_speed_modifier,string"`
+		StrafeSpeedModifier    float64           `json:"strafe_speed_modifier,string"`
+	} `json:"profile"`
+
+	OnlineStatus int `json:"online_status,string"`
+
+	FriendList []struct {
+		CharacterID   int64 `json:"character_id,string"`
+		LastLoginTime int64 `json:"last_login_time,string"`
+		Online        int   `json:"online,string"`
+	} `json:"friend_list"`
 }
 
 func (g *Get) Character(search map[string]string, config *Config) ([]Character, error) {
@@ -49,17 +93,12 @@ func (g *Get) Character(search map[string]string, config *Config) ([]Character, 
 	}
 	defer rsp.Body.Close()
 
-	// Read into buffer so that it can be reread. This will be used
-	// later for resolves.
-	raw, err := ioutil.ReadAll(rsp.Body)
-	if err != nil {
-		return nil, err
-	}
+	dec := json.NewDecoder(rsp.Body)
 
 	var data struct {
 		List []Character `json:"character_list"`
 	}
-	err = json.Unmarshal(raw, &data)
+	err = dec.Decode(&data)
 	if err != nil {
 		return nil, err
 	}
