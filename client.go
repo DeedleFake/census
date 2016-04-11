@@ -13,16 +13,16 @@ var (
 )
 
 type Client struct {
-	Game      string
 	ServiceID string
+	Game      string
 }
 
 func (cl Client) buildURL(verb, col string, opts ...URLOption) string {
-	return BuildURL(cl.ServiceID, "get", cl.Game, col, opts...).String()
+	return BuildURL(cl.ServiceID, verb, cl.Game, col, opts...).String()
 }
 
-func (cl Client) fetch(col string, opts ...URLOption) (json.RawMessage, error) {
-	url := cl.buildURL("get", col, opts...)
+func (cl Client) Fetch(verb, col string, opts ...URLOption) (json.RawMessage, error) {
+	url := cl.buildURL(verb, col, opts...)
 	rsp, err := client.Get(url)
 	if err != nil {
 		return nil, err
@@ -48,7 +48,7 @@ func (cl Client) fetch(col string, opts ...URLOption) (json.RawMessage, error) {
 }
 
 func (cl Client) Get(dst interface{}, col string, opts ...URLOption) error {
-	raw, err := cl.fetch(col, opts...)
+	raw, err := cl.Fetch("get", col, opts...)
 	if err != nil {
 		return err
 	}
@@ -57,7 +57,7 @@ func (cl Client) Get(dst interface{}, col string, opts ...URLOption) error {
 }
 
 func (cl Client) Count(col string, opts ...URLOption) (int, error) {
-	raw, err := cl.fetch(col, opts...)
+	raw, err := cl.Fetch("count", col, opts...)
 	if err != nil {
 		return 0, err
 	}
