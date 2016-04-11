@@ -3,27 +3,30 @@ package census
 import (
 	"encoding/json"
 	"net/http"
-	"time"
-)
-
-var (
-	client = &http.Client{
-		Timeout: 5 * time.Minute,
-	}
 )
 
 type Client struct {
 	ServiceID string
 	Game      string
+
+	HTTPClient *http.Client
 }
 
 func (cl Client) buildURL(verb, col string, opts ...URLOption) string {
 	return BuildURL(cl.ServiceID, verb, cl.Game, col, opts...).String()
 }
 
-func (cl Client) Fetch(verb, col string, opts ...URLOption) (json.RawMessage, error) {
+func (cl Client) c() *http.Client {
+	if cl.HTTPClient == nil {
+		return http.DefaultClient
+	}
+
+	return cl.HTTPClient
+}
+
+func (cl Client) Fetch(verb, col string, opts ...URLOption) ([]byte, error) {
 	url := cl.buildURL(verb, col, opts...)
-	rsp, err := client.Get(url)
+	rsp, err := cl.c().Get(url)
 	if err != nil {
 		return nil, err
 	}
