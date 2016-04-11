@@ -35,7 +35,7 @@ func (cl Client) Fetch(verb, col string, opts ...URLOption) (json.RawMessage, er
 		return nil, err
 	}
 
-	var cerr CensusError
+	var cerr Error
 	err = json.Unmarshal(raw, &cerr)
 	if err != nil {
 		return nil, err
@@ -69,10 +69,10 @@ func (cl Client) Count(col string, opts ...URLOption) (int, error) {
 	return data.Count, err
 }
 
-type CensusError struct {
+type Error struct {
 	Err string `json:"error"`
 }
 
-func (err CensusError) Error() string {
+func (err Error) Error() string {
 	return err.Err
 }
